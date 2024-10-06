@@ -1,6 +1,10 @@
 # To-Do List API
 
-This project is a RESTful API for managing a to-do list with user authentication. It provides endpoints for user registration, login, and CRUD operations on to-do items.
+- This project is a RESTful API for managing a to-do list with user authentication.
+- It provides endpoints for user registration, login, and CRUD operations on to-do items.
+- This project is part of the community-driven projects published on [roadmap.sh](https://roadmap.sh/projects/todo-list-api).
+- Feel free to visit the [projects page](https://roadmap.sh/projects) to explore more.
+
 
 ## Technologies Used
 
