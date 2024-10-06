@@ -1,4 +1,4 @@
-# To-Do List API
+# To-Do List API 📝
 
 - This project is a RESTful API for managing a to-do list with user authentication.
 - It provides endpoints for user registration, login, and CRUD operations on to-do items.
@@ -6,19 +6,19 @@
 - Feel free to visit the [projects page](https://roadmap.sh/projects) to explore more.
 
 
-## Technologies Used
+## Technologies Used 🛠️
 
-- Java 22
-- Spring Boot
-- Spring Security
-- Spring Data JPA
-- SQL Server
-- Docker & Docker Compose
-- Maven
-- Swagger UI
+- Java 22 ☕
+- Spring Boot 🍃
+- Spring Security 🔒
+- Spring Data JPA 📊
+- SQL Server 🗄️
+- Docker & Docker Compose 🐳
+- Maven 📦
+- Swagger UI 📚
 
 
-## Features
+## Features 🌟
 
 - User registration and authentication
 - Create, read, update, and delete to-do items
@@ -28,13 +28,13 @@
 - Data validation
 - API documentation using Swagger UI
 
-## Prerequisites
+## Prerequisites ⚙️
 
 - Java 22 JDK
 - Docker and Docker Compose
 - Maven
 
-## Getting Started
+## Getting Started 🚀
 
 1. Clone the repository:
    ```
@@ -54,12 +54,12 @@
 
 4. The API will be available at `http://localhost:8080`
 
-## Swagger UI
+## Swagger UI 📊
 
   - You can explore and test the API using Swagger UI. After starting the application, open the following URL in your browser: `http://localhost:8080/swagger-ui/index.html`
   - This will load the interactive Swagger interface where you can view API documentation, test API endpoints, and inspect request/response details.
 
-## API Endpoints
+## API Endpoints 🔗
 
 ### User Registration
 - `POST /register`
@@ -97,21 +97,21 @@
 ### Create a To-Do Item
 - `POST /todos`
     - Headers: `Authorization: Bearer <token>`
-      - Request: 
-        ```json
-          {
-            "title": "Buy groceries",
-            "description": "Buy milk, eggs, and bread"
-          }
-        ```
-      - Response: 
-        ```json
-          {
-            "id": 1,
-            "title": "Buy groceries",
-            "description": "Buy milk, eggs, and bread"
-          }
-        ```
+    - Request: 
+      ```json
+        {
+          "title": "Buy groceries",
+          "description": "Buy milk, eggs, and bread"
+        }
+      ```
+    - Response: 
+      ```json
+        {
+          "id": 1,
+          "title": "Buy groceries",
+          "description": "Buy milk, eggs, and bread"
+        }
+      ```
 
 ### Update a To-Do Item
 - `PUT /todos/{id}`
@@ -161,13 +161,13 @@
       }
     ```
 
-## Security
+## Security 🔒
 
 - Passwords are hashed before storing in the database
 - Token-based authentication is implemented
 - Input validation is performed on all endpoints
 
-## Error Handling
+## Error Handling ⚠️
 
 The API uses appropriate HTTP status codes and error messages:
 - 400 Bad Request: For invalid input
