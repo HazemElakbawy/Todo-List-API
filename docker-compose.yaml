@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  todo-app:
+    container_name: todo-list-api
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - sqlserver
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://sqlserver:1433;encrypt=true;trustServerCertificate=true;databaseName=Todo-List-DB
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION_TIME: ${JWT_EXPIRATION_TIME}
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      SA_PASSWORD: ${DB_PASSWORD}
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+      - ./src/main/resources/db/todo_init.sql:/docker-entrypoint-initdb.d/todo_init.sql
+    command:
+      - /bin/bash
+      - -c
+      - |
+        /opt/mssql/bin/sqlservr &
+        sleep 30s
+        /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $$SA_PASSWORD -d master -i /docker-entrypoint-initdb.d/todo_init.sql
+        sleep infinity
+
+volumes:
+  sqlserver-data:
