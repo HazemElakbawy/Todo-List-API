@@ -12,7 +12,7 @@
 - Spring Boot 🍃
 - Spring Security 🔒
 - Spring Data JPA 📊
-- SQL Server 🗄️
+- MySQL 🐬️
 - Docker & Docker Compose 🐳
 - Maven 📦
 - Swagger UI 📚
