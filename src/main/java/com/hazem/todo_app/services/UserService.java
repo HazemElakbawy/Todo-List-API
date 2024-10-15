@@ -3,6 +3,7 @@ package com.hazem.todo_app.services;
 import com.hazem.todo_app.dto.LoginDTO;
 import com.hazem.todo_app.dto.RegisterDTO;
 import com.hazem.todo_app.dto.TodoDTO;
+import com.hazem.todo_app.dto.TokenDTO;
 import com.hazem.todo_app.entities.Todo;
 import com.hazem.todo_app.entities.User;
 import com.hazem.todo_app.exceptions.custom.TodoNotFoundException;
@@ -36,6 +37,11 @@ public class UserService {
     this.passwordEncoder = passwordEncoder;
   }
 
+  private TokenDTO getTokensByEmail(String email) {
+    String accessToken = jwtService.generateAccessToken(email);
+    String refreshToken = jwtService.generateRefreshToken(email);
+    return new TokenDTO(refreshToken, accessToken);
+  }
 
   private User findByEmail(String email) {
     return userRepository.findByEmail(email)
@@ -53,7 +59,7 @@ public class UserService {
     }
   }
 
-  public String registerUser(RegisterDTO registerDTO) {
+  public TokenDTO registerUser(RegisterDTO registerDTO) {
     if (userRepository.findByEmail(registerDTO.getEmail()).isPresent()) {
       throw new UserAlreadyExistsException(registerDTO.getEmail());
     }
@@ -65,15 +71,16 @@ public class UserService {
     );
 
     userRepository.save(user);
-    return jwtService.generateToken(user.getEmail());
+    return getTokensByEmail(user.getEmail());
   }
 
-  public String loginUser(LoginDTO loginDTO) {
+  public TokenDTO loginUser(LoginDTO loginDTO) {
     User user = findByEmail(loginDTO.getEmail());
     if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
       throw new BadCredentialsException("Invalid email or password");
     }
-    return jwtService.generateToken(loginDTO.getEmail());
+
+    return getTokensByEmail(user.getEmail());
   }
 
   public Page<Todo> getTodosForUser(String email, Pageable pageable) {

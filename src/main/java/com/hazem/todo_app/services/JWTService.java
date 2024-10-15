@@ -19,21 +19,32 @@ public class JWTService {
   @Value("${jwt.secret}")
   private String jwtSecret;
 
-  @Value("${jwt.expiration-time}")
-  private long jwtExpiration;
+  @Value("${jwt.access-token-expiration-time}")
+  private long accessTokenExpiryTime;
+
+  @Value("${jwt.refresh-token-expiration-time}")
+  private long refreshTokenExpiryTime;
 
   public String getEmailFromToken(String token) {
     return extractClaim(token, Claims::getSubject);
   }
 
-  public String generateToken(String email) {
+  private String generateToken(String email, long expiryTime) {
     Instant now = Instant.now();
     return Jwts.builder()
         .subject(email)
         .issuedAt(Date.from(now))
-        .expiration(Date.from(now.plus(jwtExpiration, ChronoUnit.MILLIS)))
+        .expiration(Date.from(now.plus(expiryTime, ChronoUnit.MILLIS)))
         .signWith(getSigningKey())
         .compact();
+  }
+  
+  public String generateAccessToken(String email) {
+    return generateToken(email, accessTokenExpiryTime);
+  }
+
+  public String generateRefreshToken(String email) {
+    return generateToken(email, refreshTokenExpiryTime);
   }
 
   public boolean validateToken(String token, String email) {

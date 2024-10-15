@@ -1,39 +1,38 @@
-version: '3.8'
-
 services:
-  todo-app:
+  todo-list-api:
     container_name: todo-list-api
     build: .
     ports:
       - "8080:8080"
     depends_on:
-      - sqlserver
+      mysql-db:
+        condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:sqlserver://sqlserver:1433;encrypt=true;trustServerCertificate=true;databaseName=Todo-List-DB
-      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
-      JWT_EXPIRATION_TIME: ${JWT_EXPIRATION_TIME}
+      JWT_REFRESH_EXPIRATION_TIME: ${JWT_REFRESH_EXPIRATION_TIME}
+      JWT_ACCESS_EXPIRATION_TIME: ${JWT_ACCESS_EXPIRATION_TIME}
 
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sqlserver
+  mysql-db:
+    image: mysql:latest
+    container_name: mysql-db
+    restart: always
     environment:
-      SA_PASSWORD: ${DB_PASSWORD}
-      ACCEPT_EULA: "Y"
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "mysql-db", "-u", "root", "-p${DB_PASSWORD}" ]
+      interval: 10s
+      retries: 10
+      start_period: 10s
+      timeout: 3s
+
     ports:
-      - "1433:1433"
+      - "3306:3306"
     volumes:
-      - sqlserver-data:/var/opt/mssql
-      - ./src/main/resources/db/todo_init.sql:/docker-entrypoint-initdb.d/todo_init.sql
-    command:
-      - /bin/bash
-      - -c
-      - |
-        /opt/mssql/bin/sqlservr &
-        sleep 30s
-        /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $$SA_PASSWORD -d master -i /docker-entrypoint-initdb.d/todo_init.sql
-        sleep infinity
+      - mysql-data:/var/lib/mysql
+      - ./src/main/resources/sql/db-init.sql:/docker-entrypoint-initdb.d/db-init.sql
 
 volumes:
-  sqlserver-data:
+  mysql-data:

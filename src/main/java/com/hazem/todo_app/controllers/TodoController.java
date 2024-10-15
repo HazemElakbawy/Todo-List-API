@@ -56,16 +56,13 @@ public class TodoController {
     return ResponseEntity.ok(userService.getTodoByIdForUser(todoId, email));
   }
 
-
   @PostMapping("/todos")
   ResponseEntity<Todo> addTodoForUser(
       @RequestHeader("Authorization") String header,
       @RequestBody TodoDTO todoDTO
   ) {
     String email = jwtService.getEmailFromToken(getTokenFromHeader(header));
-    return ResponseEntity
-        .status(HttpStatus.CREATED.value())
-        .body(userService.addTodoForUser(todoDTO, email));
+    return new ResponseEntity<>(userService.addTodoForUser(todoDTO, email), HttpStatus.CREATED);
   }
 
   @PutMapping("/todos/{todoId}")
@@ -75,9 +72,7 @@ public class TodoController {
       @RequestBody TodoDTO todoDTO
   ) throws AccessDeniedException {
     String email = jwtService.getEmailFromToken(getTokenFromHeader(header));
-    return ResponseEntity
-        .status(HttpStatus.OK.value())
-        .body(userService.updateTodoForUser(todoId, todoDTO, email));
+    return ResponseEntity.ok(userService.updateTodoForUser(todoId, todoDTO, email));
   }
 
   @DeleteMapping("/todos/{todoId}")
@@ -87,7 +82,7 @@ public class TodoController {
   ) throws AccessDeniedException {
     String email = jwtService.getEmailFromToken(getTokenFromHeader(header));
     userService.deleteTodoForUser(todoId, email);
-    return ResponseEntity.noContent().build();
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
-
+  
 }
