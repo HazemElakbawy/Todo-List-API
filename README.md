@@ -2,9 +2,9 @@
 
 - This project is a RESTful API for managing a to-do list with user authentication.
 - It provides endpoints for user registration, login, and CRUD operations on to-do items.
-- This project is part of the community-driven projects published on [roadmap.sh](https://roadmap.sh/projects/todo-list-api).
+- This project is part of the community-driven projects published
+  on [roadmap.sh](https://roadmap.sh/projects/todo-list-api).
 - Feel free to visit the [projects page](https://roadmap.sh/projects) to explore more.
-
 
 ## Technologies Used 🛠️
 
@@ -17,13 +17,12 @@
 - Maven 📦
 - Swagger UI 📚
 
-
 ## Features 🌟
 
 - User registration and authentication
 - Create, read, update, and delete to-do items
 - Pagination and filtering for to-do list
-- Token-based authentication
+- Token-based authentication with refresh token mechanism
 - Error handling and security measures
 - Data validation
 - API documentation using Swagger UI
@@ -56,17 +55,20 @@
 
 ## Swagger UI 📊
 
-  - You can explore and test the API using Swagger UI. After starting the application, open the following URL in your browser: `http://localhost:8080/swagger-ui/index.html`
-  - This will load the interactive Swagger interface where you can view API documentation, test API endpoints, and inspect request/response details.
+- You can explore and test the API using Swagger UI. After starting the application, open the following URL in your
+  browser: `http://localhost:8080/swagger-ui/index.html`
+- This will load the interactive Swagger interface where you can view API documentation, test API endpoints, and inspect
+  request/response details.
 
 ## API Endpoints 🔗
 
 ### User Registration
+
 - `POST /register`
   - Request:
     ```json
       {
-        "name": "John Doe",
+        "username": "John Doe",
         "email": "john@doe.com",
         "password": "password"
       }
@@ -74,73 +76,92 @@
   - Response:
     ```json
       {
-        "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoYXplbTIyQGV4YW1wbGUuY29tIiwiaWF0IjoxNzI4MjI0OTI1LCJleHAiOjM2MTcyODIyNDkyNX0.XjewZByBs3mi59U6UEtHFlx9XGcA39OnKAMSe7sPXbHSroFLz17HsIlwT-XnIb0ur0T4xEZBb2R9iCfOtoQQAA"
+        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJpYXQiOjE3MjkwMTExMjYsImV4cCI6MTcyOTYxNTkyNn0.UKJ0N32v2cmREU46FbOoe0kF-LqizTi6TY5IO0y8xNyEvUt6ql9QfkhP1nO92uMb67ZQjqKOYI5KyF00GdgQzw",
+        "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJpYXQiOjE3MjkwMTExMjYsImV4cCI6MTcyOTAxODMyNn0.iKEb1nItMmSzCw868CdFCipY82W0_MyWDRL19EYYcj7-K7GGUauo6WjpdEIQ84sOWEwyhj7GY7tRqpLKkGsosQ"
       }
     ```
 
 ### User Login
+
 - `POST /login`
-    - Request: 
-        ```json
-          {
-            "email": "john@doe.com",
-            "password": "password"
-          }
-        ```
-    - Response:
+  - Request:
       ```json
         {
-          "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoYXplbTIyQGV4YW1wbGUuY29tIiwiaWF0IjoxNzI4MjI0OTI1LCJleHAiOjM2MTcyODIyNDkyNX0.XjewZByBs3mi59U6UEtHFlx9XGcA39OnKAMSe7sPXbHSroFLz17HsIlwT-XnIb0ur0T4xEZBb2R9iCfOtoQQAA"
+          "email": "john@doe.com",
+          "password": "password"
         }
       ```
+  - Response:
+    ```json
+      {
+        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJpYXQiOjE3MjkwMTExMjYsImV4cCI6MTcyOTYxNTkyNn0.UKJ0N32v2cmREU46FbOoe0kF-LqizTi6TY5IO0y8xNyEvUt6ql9QfkhP1nO92uMb67ZQjqKOYI5KyF00GdgQzw",
+        "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJpYXQiOjE3MjkwMTExMjYsImV4cCI6MTcyOTAxODMyNn0.iKEb1nItMmSzCw868CdFCipY82W0_MyWDRL19EYYcj7-K7GGUauo6WjpdEIQ84sOWEwyhj7GY7tRqpLKkGsosQ"
+      }
+    ```
+
+### Refresh Token
+
+- `POST /refresh-token`
+  - Headers: `Authorization: Bearer <token>`
+  - Response:
+    ```json
+      {
+        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJpYXQiOjE3MjkwMTExMjYsImV4cCI6MTcyOTYxNTkyNn0.UKJ0N32v2cmREU46FbOoe0kF-LqizTi6TY5IO0y8xNyEvUt6ql9QfkhP1nO92uMb67ZQjqKOYI5KyF00GdgQzw",
+        "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGRvZS5jb20iLCJpYXQiOjE3MjkwMTExMjYsImV4cCI6MTcyOTAxODMyNn0.iKEb1nItMmSzCw868CdFCipY82W0_MyWDRL19EYYcj7-K7GGUauo6WjpdEIQ84sOWEwyhj7GY7tRqpLKkGsosQ"
+      }
+    ```
 
 ### Create a To-Do Item
+
 - `POST /todos`
-    - Headers: `Authorization: Bearer <token>`
-    - Request: 
-      ```json
-        {
-          "title": "Buy groceries",
-          "description": "Buy milk, eggs, and bread"
-        }
-      ```
-    - Response: 
-      ```json
-        {
-          "id": 1,
-          "title": "Buy groceries",
-          "description": "Buy milk, eggs, and bread"
-        }
-      ```
+  - Headers: `Authorization: Bearer <token>`
+  - Request:
+    ```json
+      {
+        "title": "Buy groceries",
+        "description": "Buy milk, eggs, and bread"
+      }
+    ```
+  - Response:
+    ```json
+      {
+        "id": 1,
+        "title": "Buy groceries",
+        "description": "Buy milk, eggs, and bread"
+      }
+    ```
 
 ### Update a To-Do Item
+
 - `PUT /todos/{id}`
-    - Headers: `Authorization: Bearer <token>`
-    - Request: 
-        ```json
-          {
-            "title": "Buy groceries",
-            "description": "Buy milk, eggs, bread, and cheese"
-          }
-        ```
-    - Response: 
+  - Headers: `Authorization: Bearer <token>`
+  - Request:
       ```json
         {
-          "id": 1,
           "title": "Buy groceries",
           "description": "Buy milk, eggs, bread, and cheese"
-        } 
+        }
       ```
+  - Response:
+    ```json
+      {
+        "id": 1,
+        "title": "Buy groceries",
+        "description": "Buy milk, eggs, bread, and cheese"
+      } 
+    ```
 
 ### Delete a To-Do Item
+
 - `DELETE /todos/{id}`
-    - Headers: `Authorization: Bearer <token>`
-    - Response: 204 No Content
+  - Headers: `Authorization: Bearer <token>`
+  - Response: 204 No Content
 
 ### Get To-Do Items
+
 - `GET /todos?page=1&limit=10`
-    - Headers: `Authorization: Bearer <token>`
-    - Response:
+  - Headers: `Authorization: Bearer <token>`
+  - Response:
     ```json
       {
         "data": [
@@ -164,12 +185,13 @@
 ## Security 🔒
 
 - Passwords are hashed before storing in the database
-- Token-based authentication is implemented
+- Token-based authentication is implemented, including refresh tokens.
 - Input validation is performed on all endpoints
 
 ## Error Handling ⚠️
 
 The API uses appropriate HTTP status codes and error messages:
+
 - 400 Bad Request: For invalid input
 - 401 Unauthorized: For authentication failures
 - 403 Forbidden: For authorization failures
